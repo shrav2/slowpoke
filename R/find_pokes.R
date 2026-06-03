@@ -2,8 +2,7 @@
 #'
 #' @param poke_name A character string to match against Pokémon names.
 #' @return A tibble of matching Pokémon card names and their flavor text.
-#' @importFrom dtplyr filter
-#' @importFrom dplyr select distinct
+#' @importFrom dplyr select distinct filter
 #' @importFrom stringr str_detect str_to_title
 #' @export
 find_poke <- function(poke_name) {
@@ -22,8 +21,8 @@ find_poke <- function(poke_name) {
 #' @param poke_names A character vector of name patterns.
 #' @return A tibble of matching Pokémon card names and flavor text.
 #' @importFrom furrr future_map
-#' @import dtplyr lazy_dt
-#' @import dplyr distinct
+#' @importFrom dtplyr lazy_dt
+#' @importFrom dplyr distinct
 #' @importFrom data.table rbindlist
 #' @export
 find_many_pokes <- function(poke_names) {
@@ -31,8 +30,10 @@ find_many_pokes <- function(poke_names) {
   results <- furrr::future_map(poke_names, find_poke)
 
   data.table::rbindlist(results) |>
-    dtplyr::lazy_dt() |>
     dplyr::distinct()
 
 }
+
+
+
 
